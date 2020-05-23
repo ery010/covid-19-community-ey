@@ -1,0 +1,2 @@
+ipycytoscape==0.2.2
+pandas
