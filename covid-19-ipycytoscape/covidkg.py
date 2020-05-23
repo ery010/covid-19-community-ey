@@ -2,6 +2,7 @@
 Knowledge Graph library for use with ipycytoscape.
 
 """
+import ipycytoscape
 import json
 
 class Node(object):
@@ -51,6 +52,27 @@ class KnowledgeGraph(object):
     def __init__(self):
         self.num_nodes = 0
         self.data = {"nodes": [], "edges": []}           
+        self.style = [{
+                        'selector': 'node',
+                        'css': {
+                            'content': 'data(name)',
+                            'text-valign': 'center',
+                            'color': 'white',
+                            'text-outline-width': 2,
+                            'text-outline-color': 'red',
+                            'background-color': 'red'
+                        }
+                        },
+                        {
+                        'selector': ':selected',
+                        'css': {
+                            'background-color': 'black',
+                            'line-color': 'black',
+                            'target-arrow-color': 'black',
+                            'source-arrow-color': 'black',
+                            'text-outline-color': 'black'
+                        }}
+                        ]
        
     def add_node(self, Node):
         """
@@ -68,20 +90,31 @@ class KnowledgeGraph(object):
         
     def save_to_JSON(self, filename, filepath):
         """
+        :param filename: File name to save JSON as.
         :param filepath: File location and name to save JSON.
         """
-        assert type(filename) == str, "Name must be a string."
+        assert type(filename) == str, "Filename must be a string."
         assert type(filepath) == str, "Path must be a string."
         
-        with open(filename + ".json", "w") as json_file:
+        with open(filepath + filename + ".json", "w") as json_file:
             json.dump(self.data, json_file)       
+            
+    def data_from_JSON(self, filename, filepath):
+        """
+        :param filename: File name to import JSON data from.
+        :param filepath: File location to import JSON file from.
+        """
+        assert type(filename) == str, "Filename must be a string."
+        assert type(filepath) == str, "Path must be a string."
         
+        with open(filepath + filename) as new_file:
+            json_file = json.load(new_file)
         
+        self.data = json_file
         
+    def load_graph(self):
+        cytoscapeobj = ipycytoscape.CytoscapeWidget()
+        cytoscapeobj.graph.add_graph_from_json(self.data)
+        cytoscapeobj.set_style(self.style)
         
-        
-        
-        
-        
-        
-        
+        return cytoscapeobj      
