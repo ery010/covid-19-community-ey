@@ -116,5 +116,6 @@ class KnowledgeGraph(object):
         cytoscapeobj = ipycytoscape.CytoscapeWidget()
         cytoscapeobj.graph.add_graph_from_json(self.data)
         cytoscapeobj.set_style(self.style)
+        cytoscapeobj.set_layout(nodeSpacing=30)
         
         return cytoscapeobj      
