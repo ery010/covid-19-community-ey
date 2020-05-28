@@ -9,25 +9,29 @@ class Node(object):
     """
     Creates a node object.
     """
-    def __init__(self, name, node_id, taxonomy_id="", href="", verbose=0):
+    def __init__(self, name, node_id, taxonomy_id="", href="", color="red", verbose=0):
         """
         :param name: Name of node object.
         :param node_id: ID tag of node object.
         :param taxonomy_id: Taxonomy ID (human or viral), optional.
         :param href: Node url, optional.
+        :param color: Color of node, default is red.
         """
         assert type(name) == str, "Name of node must be a string."
         assert type(node_id) == str, "Node ID must be a string."
         assert type(taxonomy_id) == str, "Taxonomy ID must be a string."
         assert type(href) == str, "Node url must be a string."
+        assert type(color) == str, "Node color must be a string."
        
         self.name = name
         self.node_id = node_id
         self.taxonomy_id = taxonomy_id
         self.href = href
+        self.color = color
         
         if verbose == 1:
             print("Created Node: {name: " + name + ", id: " + node_id + ", taxonomy_id: " + taxonomy_id + ", href: " + href + "}.")
+            print("Color: " + color)
         
 class Edge(object):
     """
@@ -59,8 +63,8 @@ class KnowledgeGraph(object):
                             'text-valign': 'center',
                             'color': 'white',
                             'text-outline-width': 2,
-                            'text-outline-color': 'red',
-                            'background-color': 'red'
+                            'text-outline-color': 'data(color)',
+                            'background-color': 'data(color)'
                         }
                         },
                         {
@@ -78,7 +82,7 @@ class KnowledgeGraph(object):
         """
         :param Node: Node object to add.
         """
-        new_node = {"data": {"id": Node.node_id, "name": Node.name, "taxonomy" : Node.taxonomy_id, "href": Node.href}}
+        new_node = {"data": {"id": Node.node_id, "name": Node.name, "taxonomy" : Node.taxonomy_id, "href": Node.href, "color": Node.color}}
         self.data["nodes"].append(new_node)
         
     def add_edge(self, Edge):
@@ -112,10 +116,13 @@ class KnowledgeGraph(object):
         
         self.data = json_file
         
-    def load_graph(self):
+    def load_graph(self, spacing=30):
+        """
+        :param spacing: Amount of spacing between nodes, default is 30.
+        """
         cytoscapeobj = ipycytoscape.CytoscapeWidget()
         cytoscapeobj.graph.add_graph_from_json(self.data)
         cytoscapeobj.set_style(self.style)
-        cytoscapeobj.set_layout(nodeSpacing=30)
+        cytoscapeobj.set_layout(nodeSpacing=spacing)
         
         return cytoscapeobj      
