@@ -28,6 +28,8 @@ class Node(object):
         self.taxonomy_id = taxonomy_id
         self.href = href
         self.color = color
+        self.children = []
+        self.num_children = 0
         
         if verbose == 1:
             print("Created Node: {name: " + name + ", id: " + node_id + ", taxonomy_id: " + taxonomy_id + ", href: " + href + "}.")
@@ -44,6 +46,8 @@ class Edge(object):
         """
         self.source = source
         self.target = target
+        source.children.append(target.name)
+        source.num_children += 1
         
         if verbose == 1:
             print("Created Edge: {Source: " + source.node_id + ", Target: " + target.node_id + "}.")
@@ -55,7 +59,8 @@ class KnowledgeGraph(object):
     """   
     def __init__(self):
         self.num_nodes = 0
-        self.data = {"nodes": [], "edges": []}           
+        self.data = {"nodes": [], "edges": []}
+        self.stats = {}
         self.style = [{
                         'selector': 'node',
                         'css': {
@@ -91,6 +96,11 @@ class KnowledgeGraph(object):
         """
         new_edge = {"data": {"source": Edge.source.node_id, "target": Edge.target.node_id}}
         self.data["edges"].append(new_edge)
+        
+        if Edge.source.name not in self.stats.keys():
+            self.stats[Edge.source.name] = 1
+        else:
+            self.stats[Edge.source.name] +=1
         
     def save_to_JSON(self, filename, filepath):
         """
