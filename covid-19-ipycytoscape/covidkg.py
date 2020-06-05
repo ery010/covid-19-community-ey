@@ -64,7 +64,7 @@ class KnowledgeGraph(object):
         self.style = [{
                         'selector': 'node',
                         'css': {
-                            'content': 'data(name)',
+                            'content': 'data(protein_name)',
                             'text-valign': 'center',
                             'color': 'white',
                             'text-outline-width': 2,
@@ -87,7 +87,12 @@ class KnowledgeGraph(object):
         """
         :param Node: Node object to add.
         """
-        new_node = {"data": {"id": Node.node_id, "name": Node.name, "taxonomy" : Node.taxonomy_id, "href": Node.href, "color": Node.color}}
+        new_node = {"data": {"id": Node.node_id,
+                             "protein_name": Node.name,
+                             "name": "<a href=" + Node.href + ">UniProt: " + Node.name + "</a>", 
+                             "taxonomy" : Node.taxonomy_id, 
+                             "href": Node.href, 
+                             "color": Node.color}}
         self.data["nodes"].append(new_node)
         
     def add_edge(self, Edge):
