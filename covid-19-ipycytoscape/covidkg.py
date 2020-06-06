@@ -96,7 +96,10 @@ class KnowledgeGraph(object):
         """
         new_node = {"data": {"id": Node.node_id,
                              "protein_name": Node.name,
-                             "name": "UniProt: <a href=" + Node.href + ">" + Node.name + "</a>" + Node.description, 
+                             "name": "UniProt: <a href=" + Node.href + 
+                             ">" + Node.name + 
+                             "</a><br><i>Identifier</i>: " + Node.node_id + 
+                             "<br><i>Taxonomy ID</i>: " + Node.taxonomy_id + Node.description, 
                              "taxonomy" : Node.taxonomy_id, 
                              "href": Node.href, 
                              "color": Node.color}}
