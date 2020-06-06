@@ -9,7 +9,7 @@ class Node(object):
     """
     Creates a node object.
     """
-    def __init__(self, name, node_id, taxonomy_id="", href="", color="red", verbose=0):
+    def __init__(self, name, node_id, taxonomy_id="", href="", color="red", description="", verbose=0):
         """
         :param name: Name of node object.
         :param node_id: ID tag of node object.
@@ -22,12 +22,19 @@ class Node(object):
         assert type(taxonomy_id) == str, "Taxonomy ID must be a string."
         assert type(href) == str, "Node url must be a string."
         assert type(color) == str, "Node color must be a string."
-       
+        assert type(description) == str, "Description must be a string."
+        
         self.name = name
         self.node_id = node_id
         self.taxonomy_id = taxonomy_id
         self.href = href
         self.color = color
+        
+        if description != "":
+            self.description = "<br>" + description
+        else:
+            self.description = description
+            
         self.children = []
         self.num_children = 0
         
@@ -89,7 +96,7 @@ class KnowledgeGraph(object):
         """
         new_node = {"data": {"id": Node.node_id,
                              "protein_name": Node.name,
-                             "name": "<a href=" + Node.href + ">UniProt: " + Node.name + "</a>", 
+                             "name": "UniProt: <a href=" + Node.href + ">" + Node.name + "</a>" + Node.description, 
                              "taxonomy" : Node.taxonomy_id, 
                              "href": Node.href, 
                              "color": Node.color}}
